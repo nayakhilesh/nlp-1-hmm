@@ -1,0 +1,14 @@
+count_freqs.py
+eval_gene_tagger.py
+gene.counts
+gene.counts.replaced
+gene.counts.test
+gene.dev
+gene.dev.tagged
+gene.key
+gene.test
+gene.train
+gene.train.bak
+gene.train.replaced
+submit.py
+temp.txt

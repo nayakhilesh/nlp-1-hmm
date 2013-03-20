@@ -12,3 +12,8 @@ gene.train.bak
 gene.train.replaced
 submit.py
 temp.txt
+gene.test.tagged
+gene_test.p1.out
+replace_infreq.pyc
+gene.counts.replaced.trigram
+gene.dev.viterbi

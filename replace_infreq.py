@@ -9,30 +9,25 @@ import os
 import shutil
 import commands
 
-# TODO : use comprehension for filtering?
-def get_infrequent(filename):
+def get_filtered(filename,filter):
   read_file = open(filename, 'rU')
-  freq = {}
-  infrequent_words = set()
+  freq_dict = {}
   for line in read_file:
     if line == '\n': continue
     (word,tag) = line.split(' ')
-    if word in freq:
-      freq[word] += 1
-    else: freq[word] = 1
+    if word in freq_dict:
+      freq_dict[word] += 1
+    else: freq_dict[word] = 1
   read_file.close()
   #print freq
-  for key,value in freq.items():
-    if value < 5:
-      infrequent_words.add(key)
-  return infrequent_words
+  return set([word for (word,freq) in freq_dict.items() if filter(word,freq)])
 
-def get_write_file_path(filename):
+def get_write_file_path(filename,suffix):
   path = os.path.abspath(filename)
-  return path + '.replaced'
-  
+  return path + suffix
+
 def write_replaced_file(infrequent_words,filename):
-  write_file_path = get_write_file_path(filename)
+  write_file_path = get_write_file_path(filename,'.replaced')
   #print write_file_path
   write_file = open(write_file_path, 'w')
   read_file = open(filename, 'rU')
@@ -48,8 +43,13 @@ def write_replaced_file(infrequent_words,filename):
   read_file.close()
   write_file.close()
   
+def infreq_filter(word,freq):
+  if freq < 5:
+    return True
+  else: return False
+
 def replace_infrequent(filename):
-  infrequent_words = get_infrequent(filename)
+  infrequent_words = get_filtered(filename,infreq_filter)
   write_replaced_file(infrequent_words,filename)    
 
 def usage():

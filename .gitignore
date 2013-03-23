@@ -19,3 +19,10 @@ gene.counts.replaced.trigram
 gene.dev.viterbi
 gene_test.p2.out
 gene.test.viterbi
+gene.counts.replaced.classes
+gene.dev.tagged.classes
+gene.dev.viterbi.classes
+gene.test.tagged.classes
+gene.test.viterbi.classes
+gene.train.replaced.classes
+gene_test.p3.out

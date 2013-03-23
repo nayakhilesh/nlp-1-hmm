@@ -9,7 +9,7 @@ import os
 import shutil
 import commands
 
-from replace_infreq import get_filtered, get_write_file_path
+from replace_infreq import get_filtered, get_write_file_path, resolve_rare_class
 
 tag_list = ['I-GENE','O']
 trigram_estimates_dict = {}
@@ -51,7 +51,7 @@ def get_emission_params(filename):
 
 def get_tag(word,emission_params,freq_words):
   if word not in freq_words:
-    word = '_RARE_'
+    word = resolve_rare_class(word)
   max_val = 0
   max_tag = ''
   for tag in tag_list:
@@ -65,7 +65,7 @@ def get_tag(word,emission_params,freq_words):
 
 def create_tagged_file(emission_params,filename,freq_words):
   read_file = open(filename,'rU')
-  write_file_path = get_write_file_path(filename,'.tagged')
+  write_file_path = get_write_file_path(filename,'.tagged.classes')
   write_file = open(write_file_path, 'w')
   for line in read_file:
     if line.strip() == '': 
@@ -79,7 +79,7 @@ def create_tagged_file(emission_params,filename,freq_words):
 
 def create_viterbi(emission_params,filename,freq_words):
   read_file = open(filename,'rU')
-  write_file_path = get_write_file_path(filename,'.viterbi')
+  write_file_path = get_write_file_path(filename,'.viterbi.classes')
   write_file = open(write_file_path, 'w')
   sentence = []
   for line in read_file:
@@ -123,13 +123,14 @@ def generate_trigram_estimates(filename):
   for ((x,y,z),value) in trigram_counts_dict.items():
     trigram_estimates_dict[(x,y,z)] = value/bigram_counts_dict[(x,y)]
   #print trigram_estimates_dict
-    
+
 def trigram_estimate(x,y,z):
+  ''' trigram_estimate(x,y,z) equivalent to q(z|x,y) '''
   return trigram_estimates_dict[(x,y,z)]
   
 def get_emission_param(word,tag,emission_params,freq_words):
   if word not in freq_words:
-    word = '_RARE_'
+    word = resolve_rare_class(word)
   if (word,tag) in emission_params:
    return emission_params[(word,tag)]
   else: return 0.0
@@ -236,8 +237,7 @@ def main():
       create_tagged_file(emission_params,input_file,freq_words)
       
       generate_trigram_estimates(counts_file)
-      print trigram_estimates_dict
-      #seems ok till here TODO
+      #print trigram_estimates_dict
       create_viterbi(emission_params,input_file,freq_words)
     
   else:

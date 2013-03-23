@@ -27,8 +27,17 @@ def get_write_file_path(filename,suffix):
   path = os.path.abspath(filename)
   return path + suffix
 
+def resolve_rare_class(word):
+  if re.search(r'.*\d.*',word):
+    return '_NUMERIC_'
+  elif word.isupper():
+    return '_ALLCAPS_'
+  elif word[-1].isupper():
+    return '_LASTCAP_'
+  else: return '_RARE_'
+
 def write_replaced_file(infrequent_words,filename):
-  write_file_path = get_write_file_path(filename,'.replaced')
+  write_file_path = get_write_file_path(filename,'.replaced.classes')
   #print write_file_path
   write_file = open(write_file_path, 'w')
   read_file = open(filename, 'rU')
@@ -38,7 +47,7 @@ def write_replaced_file(infrequent_words,filename):
       continue
     (word,tag) = line.split(' ')
     if word in infrequent_words:
-      write_file.write('_RARE_ ' + tag)
+      write_file.write(resolve_rare_class(word) + ' ' + tag)
     else:
       write_file.write(line)
   read_file.close()

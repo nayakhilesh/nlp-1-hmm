@@ -68,7 +68,7 @@ def create_tagged_file(emission_params,filename,freq_words):
   write_file_path = get_write_file_path(filename,'.tagged')
   write_file = open(write_file_path, 'w')
   for line in read_file:
-    if line == '\n': 
+    if line.strip() == '': 
       write_file.write('\n')
       continue 
     word = line.strip()
@@ -83,7 +83,7 @@ def create_viterbi(emission_params,filename,freq_words):
   write_file = open(write_file_path, 'w')
   sentence = []
   for line in read_file:
-    if line == '\n': 
+    if line.strip() == '': 
       sentence.append('STOP')
       viterbi_tags = viterbi(emission_params,freq_words,sentence)
       write_viterbi_tags(sentence,viterbi_tags,write_file)
@@ -104,6 +104,7 @@ def write_viterbi_tags(sentence,viterbi_tags,write_file):
   write_file.write('\n')
 
 def generate_trigram_estimates(filename):
+  global trigram_estimates_dict
   bigram_counts_dict = {}
   trigram_counts_dict = {}
   read_file = open(filename,'rU')
@@ -235,6 +236,8 @@ def main():
       create_tagged_file(emission_params,input_file,freq_words)
       
       generate_trigram_estimates(counts_file)
+      print trigram_estimates_dict
+      #seems ok till here TODO
       create_viterbi(emission_params,input_file,freq_words)
     
   else:

@@ -17,3 +17,5 @@ gene_test.p1.out
 replace_infreq.pyc
 gene.counts.replaced.trigram
 gene.dev.viterbi
+gene_test.p2.out
+gene.test.viterbi

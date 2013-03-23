@@ -13,7 +13,8 @@ def get_filtered(filename,filter):
   read_file = open(filename, 'rU')
   freq_dict = {}
   for line in read_file:
-    if line == '\n': continue
+    if line.strip() == '': 
+      continue
     (word,tag) = line.split(' ')
     if word in freq_dict:
       freq_dict[word] += 1
@@ -32,7 +33,7 @@ def write_replaced_file(infrequent_words,filename):
   write_file = open(write_file_path, 'w')
   read_file = open(filename, 'rU')
   for line in read_file:
-    if line == '\n': 
+    if line.strip() == '': 
       write_file.write('\n')
       continue
     (word,tag) = line.split(' ')
